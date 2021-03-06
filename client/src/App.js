@@ -1,26 +1,111 @@
 import { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Button from "react-bootstrap/Button";
 import "./App.css";
+import InputGroup from "react-bootstrap/InputGroup";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import FormControl from "react-bootstrap/FormControl";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Jumbotron from "react-bootstrap/Jumbotron";
 
 function App() {
+  const [currency, setCurrency] = useState('USD');
+  const [amount, setAmount] = useState(0);
+  const [conversion, setConversion] = useState('USD');
+  const [conversionAmount, setConversionAmount] = useState(0);
 
-  const [currency, setCurrency] = useState(0); 
+  // const currencies = [
+  //   "CAD",
+  //   "HKD",
+  //   "ISK",
+  //   "PHP",
+  //   "DKK",
+  //   "HUF",
+  //   "CZK",
+  //   "GBP",
+  //   "RON",
+  //   "SEK",
+  //   "IDR",
+  //   "INR",
+  //   "BRL",
+  //   "RUB",
+  //   "HRK",
+  //   "JPY",
+  //   "THB",
+  //   "CHF",
+  //   "EUR",
+  //   "MYR",
+  //   "BGN",
+  //   "TRY",
+  //   "CNY",
+  //   "NOK",
+  //   "NZD",
+  //   "ZAR",
+  //   "USD",
+  //   "MXN",
+  //   "SGD",
+  //   "AUD",
+  //   "ILS",
+  //   "KRW",
+  //   "PLN",
+  // ];
 
-  const names = ['Zach', 'Hector', 'Spike'];
+  const currencies = [
+    'USD',
+    'CAD',
+    'EUR',
+    'JPY'
+  ]
 
-  function test() {
-    // fetch("http://localhost:5000/")
-    //   .then((response) => response.json())
-    //   .then((data) => console.log(data));
-    setCurrency(currency + 1);
+  function submitRequest() {
+    console.log('hello');
   }
 
   return (
     <div className="App">
-      <p>Currency value: {currency}</p>
-      {names.map(e => <p>{e}</p>)}
-      {[<p>1</p>, <p>2</p>]}
-      <input></input>
-      <button onClick={test}>Submit</button>
+      <Container>
+        <Jumbotron>
+          <h1>Currency Wallet</h1>
+        </Jumbotron>
+        <Row>
+          <InputGroup className="mb-3">
+            <DropdownButton
+              as={InputGroup.Prepend}
+              variant="outline-secondary"
+              title={currency}
+              id="input-group-dropdown-1"
+            >
+              {currencies.map((curr) => {
+                return <Dropdown.Item onClick={() => setCurrency(curr)}>{curr}</Dropdown.Item>;
+              })}
+            </DropdownButton>
+            <FormControl aria-describedby="basic-addon1" />
+          </InputGroup>
+        </Row>
+        <Row>
+          <h3> Is equal to...</h3>
+          <InputGroup className="mb-3">
+            <DropdownButton
+              as={InputGroup.Prepend}
+              variant="outline-secondary"
+              title={conversion}
+              id="input-group-dropdown-1"
+            >
+              {currencies.map((curr) => {
+                return <Dropdown.Item onClick={() => setConversion(curr)}>{curr}</Dropdown.Item>;
+              })}
+            </DropdownButton>
+            <FormControl type="text" placeholder={conversionAmount} readOnly />
+          </InputGroup>
+        </Row>
+        <Row>
+        </Row>
+        <Button variant="dark" onClick={submitRequest}>
+          Convert
+        </Button>
+      </Container>
     </div>
   );
 }
