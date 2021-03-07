@@ -11,9 +11,9 @@ import Row from "react-bootstrap/Row";
 import Jumbotron from "react-bootstrap/Jumbotron";
 
 function App() {
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState("USD");
   const [amount, setAmount] = useState(0);
-  const [conversion, setConversion] = useState('USD');
+  const [conversion, setConversion] = useState("USD");
   const [conversionAmount, setConversionAmount] = useState(0);
 
   // const currencies = [
@@ -52,15 +52,29 @@ function App() {
   //   "PLN",
   // ];
 
-  const currencies = [
-    'USD',
-    'CAD',
-    'EUR',
-    'JPY'
-  ]
+  const currencies = ["USD", "CAD", "EUR", "JPY"];
 
-  function submitRequest() {
-    console.log('hello');
+  async function submitRequest() {
+
+    const data = {
+      currency: currency,
+      amount: amount,
+      convertTo: conversion
+    }
+    
+    const res = await fetch("http://localhost:5000/api/convert", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        'Accept': 'application/json',
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    });
+
+    const body = await res.json();
+
+    setConversionAmount(body.amount);
   }
 
   return (
@@ -78,10 +92,21 @@ function App() {
               id="input-group-dropdown-1"
             >
               {currencies.map((curr) => {
-                return <Dropdown.Item onClick={() => setCurrency(curr)}>{curr}</Dropdown.Item>;
+                return (
+                  <Dropdown.Item onClick={() => setCurrency(curr)}>
+                    {curr}
+                  </Dropdown.Item>
+                );
               })}
             </DropdownButton>
-            <FormControl aria-describedby="basic-addon1" />
+            <FormControl
+              type="number"
+              defaultValue={0}
+              onChange={(e) => {
+                setAmount(parseFloat(e.target.value));
+              }}
+              aria-describedby="basic-addon1"
+            />
           </InputGroup>
         </Row>
         <Row>
@@ -94,14 +119,17 @@ function App() {
               id="input-group-dropdown-1"
             >
               {currencies.map((curr) => {
-                return <Dropdown.Item onClick={() => setConversion(curr)}>{curr}</Dropdown.Item>;
+                return (
+                  <Dropdown.Item onClick={() => setConversion(curr)}>
+                    {curr}
+                  </Dropdown.Item>
+                );
               })}
             </DropdownButton>
             <FormControl type="text" placeholder={conversionAmount} readOnly />
           </InputGroup>
         </Row>
-        <Row>
-        </Row>
+        <Row></Row>
         <Button variant="dark" onClick={submitRequest}>
           Convert
         </Button>

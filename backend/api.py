@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify, json
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 valid_currencies = {'CAD', 'HKD', 'ISK', 'PHP', 'DKK', 'HUF', 'CZK', 'GBP', 'RON', 'SEK', 'IDR', 'INR', 'BRL', 'RUB', 'HRK', 'JPY', 'THB', 'CHF', 'EUR', 'MYR', 'BGN', 'TRY', 'CNY', 'NOK', 'NZD', 'ZAR', 'USD', 'MXN', 'SGD', 'AUD', 'ILS', 'KRW', 'PLN'}
 
 @app.route('/')
@@ -30,8 +32,10 @@ def convert():
     result = dict()
     result['currency'] = desired_currency
     result['amount'] = amount * conversion_rate
-
-    return jsonify(result)
+    
+    response = jsonify(result)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
     
 if __name__ == '__main__':
     app.run()
